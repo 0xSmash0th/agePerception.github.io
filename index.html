@@ -1,12 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Step 1-a</title>
-</head>
+<html>                     
+<head>                          
+    <title>Logarithmic Graph</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;      
+            padding: 0;            
+        }                      
+                                     
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }                      
+                                     
+        #container {                                                       
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;     
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }       
+                                     
+        form {            
+            margin-bottom: 20px;
+        }   
+                                     
+        label {
+            display: block;
+            margin-bottom: 10px;                                                                                                                      
+            font-weight: bold;                                                                                                                                
+        }                                                                                                                                                                                                                        
+        input[type="number"] {                                                                                                                                    
+            padding: 5px;                                                  
+            font-size: 14px;                                                                                                                          
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            width: 100px;    
+        }                                                                  
+                                                                                                                                                      
+        button {
+            padding: 10px 20px;                                            
+            font-size: 14px;                                               
+            background-color: #4CAF50;
+            color: #fff;                                                   
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }                                                                                                                                             
+                                     
+        #graph {
+            width: 100%;
+            height: 400px;                                                                                                                            
+        }                           
+    </style>                                                                                                                                          
+</head>  
+
 <body>
-    <div id="chartDiv" style="width:50%; height:300px; margin:0 auto;"></div>
+    <div id="container">
+      <p>Excerpt from this article: https://medicalxpress.com/news/2016-08-quickly-older.html</p>
+        <p>We commonly think of our lives in terms of decades – our 20s, our 30s and so on – which suggests an equal weight to each period. However, on the logarithmic scale, we perceive different periods of time as the same length. The following differences in age would be perceived the same under this theory: five to ten, ten to 20, 20 to 40 and 40 to 80.</p>
+        <p>I don't wish to end on a depressing note, but the five-year period you experienced between the ages of five and ten could feel just as long as the period between the ages of 40 and 80.</p>
+        <p>So get busy. Time flies, whether you're having fun or not. And it's flying faster and faster every day.</p>
+        <h1>Logarithmic Graph</h1>
+
+        <form id="inputForm">
+            <label for="base">Elder Age:</label>
+            <input type="number" id="elderAge" min="2" step="1" value="30">
+            <br>
+            <label for="input">Child age:</label>
+            <input type="number" id="childAge" min="1" step="1" value="5">
+            <br>
+            <button type="submit">Plot Graph</button>
+        </form>
+        <br>
+        <br>
+        <p>Here we can see how many years the child percives each year to be compared to the adult:</p>
+        <div id="child_graph"></div>
+        <br>
+        <br>
+        <p><br>Here we can see how short each year of the childs life feels to the adult (While these graphs look identical note the numbers):</p>
+        <div id="elder_graph"></div>
+        <p>For instance: A 30 year old adult perceives the year passing 6 times faster than a 5 year old child. In other words, this one year for the adult feels like 6 to the child and will take up the proportianal amount of memory. This is why we remember our childhood in so much more detail than the rest of our life.</p>
+    </div>
+
+    <script>
+        document.getElementById("inputForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get user input values
+            var elderAge = parseFloat(document.getElementById("elderAge").value);
+            var childAge = parseFloat(document.getElementById("childAge").value);
+            var elderYearPerception = 1/elderAge
+            var childYearPerception = 1/childAge
+            var childComparative = childYearPerception/elderYearPerception
+            var elderComparative = 1/childComparative
+
+            // Plot the graph using Plotly.js library
+            Plotly.newPlot("child_graph", [{
+                type: "bar",
+                x: [ 1, childComparative],
+                y: ['1 year: Elder', 'Child'],
+                orientation: 'h'
+            }], {
+                title: "Child perspective",
+                xaxis: { title: "percived years" },
+                margin: { t: 50 }
+            });
+            Plotly.newPlot("elder_graph", [{
+                type: "bar",
+                x: [elderComparative, 1],
+                y: ['Elder', '1 year: Child'],
+                orientation: 'h'
+            }], {
+                title: "Elder perspective",
+                xaxis: { title: "percived years" },
+                margin: { t: 50 }
+            });
+        });
+    </script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </body>
-<script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
-<script src="js/index.js"></script>
 </html>
+
